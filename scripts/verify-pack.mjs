@@ -1,4 +1,4 @@
-import {mkdtemp, mkdir, rm, writeFile} from 'node:fs/promises';
+import {mkdtemp, mkdir, realpath, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
@@ -6,7 +6,9 @@ import {existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const temporaryRoot = await mkdtemp(path.join(tmpdir(), 'repo-lib-pack-'));
+const temporaryRoot = await realpath(
+	await mkdtemp(path.join(tmpdir(), 'repo-lib-pack-'))
+);
 const packed = run(
 	pnpmCommand(),
 	['pack', '--json', '--pack-destination', temporaryRoot],

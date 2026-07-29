@@ -1,5 +1,14 @@
 import {execFile} from 'node:child_process';
-import {mkdtemp, mkdir, readFile, rm, symlink, unlink, writeFile} from 'node:fs/promises';
+import {
+	mkdtemp,
+	mkdir,
+	readFile,
+	realpath,
+	rm,
+	symlink,
+	unlink,
+	writeFile,
+} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {promisify} from 'node:util';
@@ -26,7 +35,9 @@ const execFileAsync = promisify(execFile);
 const temporaryDirectories: string[] = [];
 
 async function tempDirectory(label: string): Promise<string> {
-	const directory = await mkdtemp(path.join(tmpdir(), `repo-lib-${label}-`));
+	const directory = await realpath(
+		await mkdtemp(path.join(tmpdir(), `repo-lib-${label}-`)),
+	);
 	temporaryDirectories.push(directory);
 	return directory;
 }
@@ -217,7 +228,7 @@ describe('pull preflight and execution', () => {
 		await commitFile(primary, 'tracked.txt', 'one\n');
 		await git(primary, 'remote', 'add', 'origin', bare);
 		await git(primary, 'push', '-u', 'origin', 'main');
-		await git(fixtureRoot, 'clone', bare, secondary);
+		await git(fixtureRoot, 'clone', '-c', 'core.autocrlf=false', bare, secondary);
 		return {bare, primary, secondary};
 	}
 

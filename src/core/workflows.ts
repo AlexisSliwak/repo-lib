@@ -403,7 +403,8 @@ export async function addWorkflow(
 		throw new RepoLibError('repo-lib add requires at least one file or directory.', 2);
 	}
 	const active = await activeProject(ui, options, true);
-	const selected = pathsToAdd.map(value => path.resolve(withCwd(options), value));
+	const cwd = await canonicalizePath(withCwd(options));
+	const selected = pathsToAdd.map(value => path.resolve(cwd, value));
 	const collected = await collectSelectedFiles(
 		active.context.worktreePath,
 		selected,

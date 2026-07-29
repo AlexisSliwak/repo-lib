@@ -1,5 +1,5 @@
 import {execFile} from 'node:child_process';
-import {mkdtemp, mkdir, rm, writeFile} from 'node:fs/promises';
+import {mkdtemp, mkdir, realpath, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {promisify} from 'node:util';
@@ -16,7 +16,9 @@ export interface Sandbox {
 }
 
 export async function createSandbox(): Promise<Sandbox> {
-	const root = await mkdtemp(path.join(tmpdir(), 'repo-lib-workflow-'));
+	const root = await realpath(
+		await mkdtemp(path.join(tmpdir(), 'repo-lib-workflow-')),
+	);
 	const worktree = path.join(root, 'worktree');
 	const library = path.join(root, 'library');
 	const configPath = path.join(root, 'config', 'config.json');

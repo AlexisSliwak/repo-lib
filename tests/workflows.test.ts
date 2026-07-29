@@ -4,6 +4,7 @@ import {
 	readdir,
 	rm,
 	stat,
+	symlink,
 	writeFile,
 } from 'node:fs/promises';
 import path from 'node:path';
@@ -213,6 +214,27 @@ describe('command workflows', () => {
 				configPath: sandbox.configPath,
 			}),
 		).rejects.toThrow('escapes');
+	});
+
+	it('resolves relative add paths from a directory alias', async () => {
+		const project = await configuredProject();
+		const alias = path.join(sandbox.root, 'project-alias');
+		await writeFile(path.join(project, '.env'), 'TOKEN=secret');
+		try {
+			await symlink(project, alias, process.platform === 'win32' ? 'junction' : 'dir');
+		} catch {
+			return;
+		}
+
+		const summary = await addWorkflow(new FakeUi(), ['.env'], {
+			cwd: alias,
+			configPath: sandbox.configPath,
+		});
+
+		expect(summary.copied).toEqual(['.env']);
+		expect(await readFile(path.join(sandbox.library, 'project', '.env'), 'utf8')).toBe(
+			'TOKEN=secret',
+		);
 	});
 
 	it('returns a clear no-op for tracked-only add and rejects an empty path list', async () => {
@@ -434,7 +456,16 @@ describe('command workflows', () => {
 		await git(source, 'remote', 'add', 'origin', remote);
 		await git(source, 'push', '-u', 'origin', 'main');
 		const project = path.join(sandbox.worktree, 'project');
-		await git(sandbox.worktree, 'clone', '--branch', 'main', remote, project);
+		await git(
+			sandbox.worktree,
+			'clone',
+			'-c',
+			'core.autocrlf=false',
+			'--branch',
+			'main',
+			remote,
+			project,
+		);
 		await mkdir(path.join(sandbox.library, 'project'), {recursive: true});
 		await writeRemoteMarker(path.join(sandbox.library, 'project'), remote);
 		await writeFile(path.join(sandbox.library, 'project', '.env'), 'restored');

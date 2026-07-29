@@ -1,4 +1,12 @@
-import {mkdtemp, mkdir, readFile, rm, symlink, writeFile} from 'node:fs/promises';
+import {
+	mkdtemp,
+	mkdir,
+	readFile,
+	realpath,
+	rm,
+	symlink,
+	writeFile,
+} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {afterEach, describe, expect, it} from 'vitest';
@@ -34,7 +42,9 @@ import {
 const temporaryDirectories: string[] = [];
 
 async function temporaryDirectory(): Promise<string> {
-	const directory = await mkdtemp(path.join(tmpdir(), 'repo-lib-config-'));
+	const directory = await realpath(
+		await mkdtemp(path.join(tmpdir(), 'repo-lib-config-')),
+	);
 	temporaryDirectories.push(directory);
 	return directory;
 }

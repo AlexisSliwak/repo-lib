@@ -48,5 +48,13 @@
     "ink-testing-library": "^4.0.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlexisSliwak/repo-lib.git"
+  },
+  "homepage": "https://github.com/AlexisSliwak/repo-lib#readme",
+  "bugs": {
+    "url": "https://github.com/AlexisSliwak/repo-lib/issues"
   }
 }
