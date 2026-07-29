@@ -34,13 +34,13 @@ configuration directory.
 Run the published CLI without installing it globally:
 
 ```sh
-npx repo-lib init
+npx @alexissliwak/repo-lib init
 ```
 
 You can also install it globally with pnpm:
 
 ```sh
-pnpm add --global repo-lib
+pnpm add --global @alexissliwak/repo-lib
 repo-lib --help
 ```
 
@@ -55,7 +55,7 @@ During `init`, choose one of two modes:
 
 If a discovered repository has no remote, `init` explains that its tracked
 source will not be backed up and asks whether to register it as local-only. You
-can add a Git remote later and run `npx repo-lib push`.
+can add a Git remote later and run `npx @alexissliwak/repo-lib push`.
 
 The library destination must be empty, and the library and worktree roots must
 not overlap.
@@ -70,7 +70,7 @@ Interactively creates the active configuration and optionally discovers
 projects in an existing worktree.
 
 ```sh
-npx repo-lib init
+npx @alexissliwak/repo-lib init
 ```
 
 Initialization shows the plaintext-storage warning before configuration is
@@ -81,7 +81,7 @@ saved. It does not copy untracked files from an existing worktree.
 Explicitly adds files or directories from the current project to its library:
 
 ```sh
-npx repo-lib add .env config/local.json private-certs/
+npx @alexissliwak/repo-lib add .env config/local.json private-certs/
 ```
 
 Directories are traversed recursively. Only untracked regular files are copied.
@@ -97,10 +97,10 @@ Updates the library from the current worktree:
 
 ```sh
 # Refresh only payload already represented in the library
-npx repo-lib push
+npx @alexissliwak/repo-lib push
 
 # Also discover new, non-ignored untracked files
-npx repo-lib push --all
+npx @alexissliwak/repo-lib push --all
 ```
 
 Before copying, both forms remove library payload that has become tracked and
@@ -122,7 +122,7 @@ longer matches any configured remote is treated as an error.
 Updates tracked source and then overlays the current project's library payload:
 
 ```sh
-npx repo-lib pull
+npx @alexissliwak/repo-lib pull
 ```
 
 For a remote-backed project, `pull` requires:
@@ -150,7 +150,7 @@ Lists the current project's stored payload files in stable, project-relative
 order:
 
 ```sh
-npx repo-lib list
+npx @alexissliwak/repo-lib list
 ```
 
 The reserved marker and nested projects are not shown.
@@ -158,9 +158,9 @@ The reserved marker and nested projects are not shown.
 ### Help and version
 
 ```sh
-npx repo-lib --help
-npx repo-lib --version
-npx repo-lib push --help
+npx @alexissliwak/repo-lib --help
+npx @alexissliwak/repo-lib --version
+npx @alexissliwak/repo-lib push --help
 ```
 
 ## Safety behavior
@@ -210,7 +210,7 @@ Publishing is intentionally manual. Before release:
    permission to publish it:
 
    ```sh
-   pnpm view repo-lib name version
+   pnpm view @alexissliwak/repo-lib name version
    ```
 
    An unclaimed name normally returns a registry `E404`; a successful response
