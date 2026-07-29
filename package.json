@@ -1,0 +1,52 @@
+{
+  "name": "repo-lib",
+  "version": "0.1.0",
+  "description": "Keep private, untracked project files locally while source code lives in remote Git repositories.",
+  "packageManager": "pnpm@11.15.1",
+  "type": "module",
+  "bin": {
+    "repo-lib": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "build": "pnpm run clean && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "pack:verify": "node scripts/verify-pack.mjs",
+    "prepack": "pnpm run build"
+  },
+  "engines": {
+    "node": ">=22.12",
+    "pnpm": ">=11.15.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cli",
+    "git",
+    "ink",
+    "secrets",
+    "worktree"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@inkjs/ui": "^2.0.0",
+    "ink": "^7.1.1",
+    "react": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "ink-testing-library": "^4.0.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}
